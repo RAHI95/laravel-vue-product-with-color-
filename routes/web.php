@@ -22,6 +22,9 @@ Route::get('product-list', 'ProductController@productlist')->name('productlist')
 Route::get('add-new-product', 'ProductController@addNewPrduct')->name('addNewPrduct');
 Route::post('save-product','ProductController@saveProduct')->name('saveProduct');
 
+// Route::get('/product/create', [ProductController\Create::class, 'index']);
+// Route::post('/product/create', [ProductController\Create::class, 'store'])->name('product.create');
+
 
 
 Auth::routes();

@@ -30,6 +30,24 @@
                                         <has-error :form="productForm" field="category_id"></has-error>
                                     </div>
                                     <div class="form-group">
+                                        <label for="">Select Product Color</label>
+                                        <select name="color_id" class="form-control" v-model="productForm.color_id" :class="{ 'is-invalid': productForm.errors.has('color_id') }">
+                                            <option style="display:none;" value="" selected>Select Color</option>
+                                            <option :value="color.id" v-for="color in colors" :key="color.id"> {{
+                                                color.name }}</option>
+                                        </select>
+                                        <has-error :form="productForm" field="color_id"></has-error>
+                                    </div>
+                                     <div class="form-group">
+                                        <label for="">Variant</label>
+                                        <input type="checkbox" value="S" v-model="productForm.sizes"> S
+                                        <input type="checkbox" value="L" v-model="productForm.sizes"> L
+                                        <input type="checkbox" value="XL" v-model="productForm.sizes"> XL
+                                        <input type="checkbox" value="XXL" v-model="productForm.sizes"> XXL
+                                        <input type="checkbox" value="XXXL" v-model="productForm.sizes"> XXXL
+                                        <input type="checkbox" value="46" v-model="productForm.sizes"> 46
+                                    </div>
+                                    <div class="form-group">
                                         <label for="">Product price</label>
                                         <input type="text" v-model="productForm.price" name="price" class="form-control" placeholder="product price">
                                         <HasError :form="productForm" field="price" />
@@ -52,6 +70,41 @@
                                                 <img :src="image" alt="" class="img-fluid">
                                             </div>
                                         </div>
+                                    </div>
+                                     <div class="form-group">
+                                   <div id="preview">
+                                    <ul>
+                                        <div class="row" v-if="productForm.sizes.length>0">
+                                            <div class="col-md-3 text-right">
+                                                <h4>size:</h4>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h4>input:</h4>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h4>quantity:</h4>
+                                            </div>
+                                        </div>
+                                        <li v-for="(size, index) in productForm.sizes" class="mb-2" :key="index">
+                                        <div class="row">
+                                            <div class="col-md-3 text-right">
+                                                {{size}}:
+                                            </div>
+                                            <div class="col-md-6">
+                                        <input type="number" v-model="productForm.quantity[index]" class="w-100" placeholder="Add Quantity">
+                                            </div>
+                                            <div class="col-md-3">
+                                                {{productForm.quantity[index]}}
+                                            </div>
+                                        </div>
+
+
+                                        </li>
+                                    </ul>
+        <!-- <button class="btn btn-primary" @click="addElement">
+            New Element
+  </button> -->
+    </div>
                                     </div>
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-success">Update Product</button>
@@ -84,11 +137,15 @@ export default {
             price: '',
             image: '',
             description: '',
-             category_id:'',
+            sizes:[],
+            quantity:[],
+            category_id:'',
+            color_id:'',
             _method: 'put',
         }),
         image:'',
         categories: [],
+        colors:[]
         }
     },
     methods:{
@@ -102,8 +159,10 @@ export default {
                 this.productForm.title = product.title;
                 this.productForm.description = product.description;
                 this.productForm.category_id = product.category_id;
+                this.productForm.color_id = product.color_id;
                 this.productForm.price = product.price;
                 this.image = product.image;
+                    this.productForm.sizes = [];
                 // this.productForm.title = response.data.title;
                 // this.productForm.title = response.data.title;
 
@@ -140,11 +199,17 @@ export default {
             axios.get('/api/category').then(response => {
                 this.categories = response.data;
             });
+        },
+        loadColors(){
+            axios.get('/api/color').then(response => {
+                this.colors = response.data;
+            });
         }
     },
     mounted(){
         this.loadProduct();
         this.loadCategories();
+        this.loadColors();
     }
 }
 </script>

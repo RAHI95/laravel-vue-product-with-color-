@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+// use App\Variation;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-
+// use phpDocumentor\Reflection\Types\Nullable;
 
 class ProductController extends Controller
 {
@@ -17,7 +19,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::with('category')->get();
+        $products = Product::with('category','color')->get();
 
         return response()->json($products, 200);
     }
@@ -44,19 +46,24 @@ class ProductController extends Controller
             'title' => 'required|max:255',
             'price' => 'required|integer',
             'image' => 'required|image|max:2048',
-            'color' => 'required',
+            'color_id' => 'required',
             'sizes' => 'required',
+            'quantity' => 'required',
             'description' => 'required',
             'category_id' => 'required',
+            'media.*' => 'required|mimes:jpg,jpeg,png|max:20000'
 
         ]);
+
 
         $product = Product::create([
             'title' => $request->title,
             'slug' => Str::slug($request->title),
-            'color' => $request->color,
+            'color_id' => $request->color_id,
             'sizes' =>json_encode($request->sizes),
+            'media' =>json_encode($request->media),
             'price' => $request->price,
+            'quantity' => json_encode($request->quantity),
             'description' => $request->description,
             'category_id' => $request->category_id,
         ]);
@@ -67,6 +74,18 @@ class ProductController extends Controller
             $product->image = '/storage/product/' . $imageName;
             $product->save();
         }
+
+        foreach($request->media as $image){
+            $from = public_path('tmp/uploads/'.$image);
+            $to = public_path('product_images/'.$image);
+
+            File::move($from, $to);
+            $product->images()->create([
+              'name' => $image,
+            ]);
+          }
+        //   $products = Product::get();
+        //   return redirect()->route('product.images', ['products'=>$products]);
 
         return response()->json($product, 200);
     }
@@ -110,8 +129,9 @@ class ProductController extends Controller
         $this->validate($request, [
             'title' => "required|max:255|unique:products,title, $product->id",
             'price' => 'required|integer',
-            'color' => 'required',
+            'color_id' => 'required',
             'sizes' => 'required',
+            'quantity' => 'required',
             'image' => 'sometimes|nullable|image|max:2048',
             'description' => 'required',
             'category_id' => 'required',
@@ -119,9 +139,10 @@ class ProductController extends Controller
 
         $product->update([
             'title'=>$request->title,
+            'color_id' => $request->color_id,
+            'sizes' =>json_encode($request->sizes),
             'price' => $request->price,
-            'color' => $request->color,
-            'sizes' => $request->sizes,
+            'quantity' => $request->quantity,
             'description' => $request->description,
             'category_id' => $request->category_id,
             'slug' => Str::slug($request->title),

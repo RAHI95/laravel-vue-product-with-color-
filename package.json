@@ -28,6 +28,7 @@
         "cxlt-vue2-toastr": "^1.1.1",
         "object-to-formdata": "^3.0.9",
         "vform": "^2.1.2",
+        "vue-media-upload": "^1.1.4",
         "vue-router": "^3.3.4"
     }
 }

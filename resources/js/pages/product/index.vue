@@ -13,22 +13,24 @@
                        <table class="table">
                         <thead>
                             <tr>
-                                 <th>Id</th>
+                                <th>Image</th>
                                 <th>Title</th>
                                 <th>Category</th>
+                                <th>color</th>
+                                <!-- <th>size</th> -->
                                 <th>Price</th>
-                                <th>Image</th>
                                 <th>Description</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="product in products" :key="product.id">
-                                <td>{{product.id}}</td>
+                                <td>  <img :src=" product.image" style="width:120px;height:50px" class="img-fluid" alt=""></td>
                                 <td>{{product.title}}</td>
                                 <td>{{product.category.name}}</td>
+                                <td>{{product.color.name}}</td>
+                                <!-- <td>{{product.sizes}}</td> -->
                                 <td>{{product.price}}</td>
-                                <td>  <img :src=" product.image" class="img-fluid" alt=""></td>
                                 <td>{{product.description}}</td>
 
 

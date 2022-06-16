@@ -6,18 +6,19 @@ import home from '../pages/home.vue';
 import categoryList from '../pages/category/index.vue';
 import createCategory from '../pages/category/create.vue'
 import editCategory from '../pages/category/edit.vue'
-
+import colorList from '../pages/color/index.vue';
+import createColor from '../pages/color/create.vue';
 import ProductList from '../pages/product/index.vue';
 import createProduct from '../pages/product/create.vue'
 import editProduct from '../pages/product/edit.vue'
-
+import createVariant from '../pages/variants/create.vue'
 const routes = new VueRouter({
     // mode:history,
     routes :[
         {
             path:'/',
-            component:home,
-            name: 'home',
+            component:createProduct,
+            name: 'create-product',
         },
         {
             path:'/category',
@@ -35,6 +36,16 @@ const routes = new VueRouter({
             name: 'edit-category',
         },
         {
+            path:'/color',
+            component:colorList,
+            name: 'color-list',
+        },
+        {
+            path:'/color/create',
+            component:createColor,
+            name: 'create-color',
+        },
+        {
             path:'/product',
             component:ProductList,
             name: 'product-list',
@@ -48,7 +59,8 @@ const routes = new VueRouter({
             path:'/product/edit/:id',
             component:editProduct,
             name: 'edit-product',
-        }
+        },
+
 
 
     ]
